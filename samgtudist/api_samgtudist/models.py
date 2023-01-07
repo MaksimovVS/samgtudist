@@ -10,16 +10,18 @@ TEAM_JOB = ('Design',
             'Tester',
             )
 
+
 class Subject(models.Model):
     subject_title = models.CharField(
-        verbose_name="Название дисциплины",
+        "Название дисциплины",
         help_text="Введите название дисциплины",
         max_length=256,
     )
 
+
 class Material(models.Model):
     material_title = models.CharField(
-        verbose_name="Название работы",
+        "Название работы",
         help_text="Введите название работы",
         max_length=256,
     )
@@ -27,25 +29,28 @@ class Material(models.Model):
         Subject,
         )
 
+
 class Content(models.Model):
     content_text = models.TextField(
-        verbose_name="Содержание",
-        help_text="Введите сожержание работы",
+        "Содержание",
+        help_text="Введите содержание работы",
     )
     material = models.OneToOneField(
         Material,
         on_delete=models.CASCADE,
     )
 
+
 class Quote(models.Model):
     quote_text = models.TextField(
-        verbose_name="Цитата",
+        "Цитата",
         help_text="Введите цитату",
     )
     material = models.OneToOneField(
         Material,
         on_delete=models.CASCADE,
     )
+
 
 class File(models.Model):
     file_type = models.CharField(
@@ -63,9 +68,10 @@ class File(models.Model):
         on_delete=models.CASCADE,
     )
 
+
 class ExamplePage(models.Model):
     page = models.ImageField(
-        verbose_name="Превью работы, доступное к показу на сайте",
+        "Превью работы, доступное к показу на сайте",
         # TODO img_previev_page_save_path - функция, которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА/ИЗОБРАЖЕНИЕ
         upload_to=img_previev_page_save_path,
         # TODO img_previev_page_name - функция которая будет называть файл
@@ -76,28 +82,30 @@ class ExamplePage(models.Model):
         on_delete=models.CASCADE,
     )
 
+
 class Team(models.Model):
     first_name = models.CharField(
-        verbose_name="Имя",
+        "Имя",
         max_length=50,
     )
     last_name = models.CharField(
-        verbose_name="Фамилия",
+        "Фамилия",
         max_length=50,
     )
     git = models.URLField(
-        verbose_name="Ссылка на github",
+        "Ссылка на github",
         blank=True,
     )
     email = models.EmailField(
-        verbose_name="Ваш емэйл",
+        "Ваш емэйл",
         blank=True,
     )
     photo = models.ImageField(
+        "Фотография",
         upload_to="/team",
-        verbose_name="Фотография",
     )
     posn = models.CharField(
+        "Роль в команде",
         max_length=128,
         choices=TEAM_JOB,
     )
