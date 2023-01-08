@@ -18,6 +18,9 @@ class Subject(models.Model):
         max_length=256,
     )
 
+    class Meta:
+        ordering = ['subject_title']
+
 
 class Material(models.Model):
     material_title = models.CharField(
@@ -25,8 +28,14 @@ class Material(models.Model):
         help_text="Введите название работы",
         max_length=256,
     )
+    created_date = models.DateTimeField(
+        verbose_name="Дата добавления в БД",
+        auto_now_add=True,
+    )
     subject = models.ManyToManyField(
         Subject,
+        related_name="materials_related",
+        related_query_name="material"
         )
 
 
@@ -46,7 +55,7 @@ class Quote(models.Model):
         "Цитата",
         help_text="Введите цитату",
     )
-    material = models.OneToOneField(
+    material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
     )
@@ -58,7 +67,8 @@ class File(models.Model):
         choices=FILES_TYPE,
     )
     file = models.FileField(
-        # TODO file_save_path - функция, которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА
+        # TODO file_save_path - функция,
+        #  которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА
         upload_to=file_save_path,
         # TODO file_name - функция которая будет называть файл
         name=file_name
@@ -70,12 +80,9 @@ class File(models.Model):
 
 
 class ExamplePage(models.Model):
-    page = models.ImageField(
-        "Превью работы, доступное к показу на сайте",
-        # TODO img_previev_page_save_path - функция, которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА/ИЗОБРАЖЕНИЕ
-        upload_to=img_previev_page_save_path,
-        # TODO img_previev_page_name - функция которая будет называть файл
-        name=img_previev_page_name
+    page = models.TextField(
+        verbose_name="HTML текст",
+        help_text="Сохраняется сгенерированный HTML текст для отображения на сайте",
     )
     material = models.ForeignKey(
         Material,
