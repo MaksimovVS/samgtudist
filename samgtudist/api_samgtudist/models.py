@@ -1,14 +1,45 @@
 from django.db import models
 
 
-FILES_TYPE = ("docs", "doc", "pdf", "jpeg", "xls")
+FILES_TYPE = (("docx", "Word"),
+              ("doc", "Word old"),
+              ("pdf", "PDF"),
+              ("jpeg", "Pictures"),
+              ("xls", "Excel"),
+              )
 
-TEAM_JOB = ('Design',
-            'Frontend Developer',
-            'Backend Developer',
-            'Project Manager',
-            'Tester',
+TEAM_JOB = (("DS",'Design'),
+            ("FD",'Frontend Developer'),
+            ("BD",'Backend Developer'),
+            ("PM",'Project Manager'),
+            ("TT",'Tester'),
             )
+
+MATERIALS_TYPE = (("kr",'Курсовая работа'),
+                  ("dr","Дипломная работа"),
+                  ("pr","Практическая работа"),
+                  ("lr","Лабораторная работа"),
+                  # "Расчетно-графическая работа",
+                  # "Пояснительная записка",
+                  # "Учебная/Производственная практика",
+                  # "Выпускная квалификационная работа",
+                  # "Тест",
+                  # "Чертеж",
+                  # "Эскиз",
+                  # "Макет",
+                  # "Лекция",
+                  # "Типовой расчет",
+                  # "Эссе",
+                  # "Экзамен",
+                  # "Ответы на вопросы",
+                  # "Ответы к тесту",
+                  # "Доклад",
+                  # "Рабочая Тетрадь",
+                  # "Реферат",
+                  # "Методические указания",
+                  # "Задача",
+                  # "Другое",
+                  )
 
 
 class Subject(models.Model):
@@ -32,6 +63,12 @@ class Material(models.Model):
         verbose_name="Дата добавления в БД",
         auto_now_add=True,
     )
+    material_type = models.CharField(
+        verbose_name="Тип работы",
+        help_text="Выберите соответсующий тип работы",
+        max_length=32,
+        choices=MATERIALS_TYPE,
+    )
     subject = models.ManyToManyField(
         Subject,
         related_name="materials_related",
@@ -47,6 +84,7 @@ class Content(models.Model):
     material = models.OneToOneField(
         Material,
         on_delete=models.CASCADE,
+        related_name="content_text"
     )
 
 
@@ -58,6 +96,8 @@ class Quote(models.Model):
     material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
+        related_name="quotes",
+        related_query_name="quotes_set"
     )
 
 
@@ -69,13 +109,15 @@ class File(models.Model):
     file = models.FileField(
         # TODO file_save_path - функция,
         #  которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА
-        upload_to=file_save_path,
+        # upload_to=file_save_path
+        upload_to="works",
         # TODO file_name - функция которая будет называть файл
-        name=file_name
+        # name=file_name
     )
     material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
+        related_name="files_with_work"
     )
 
 
@@ -87,6 +129,7 @@ class ExamplePage(models.Model):
     material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
+        related_name="example_page",
     )
 
 
@@ -109,7 +152,7 @@ class Team(models.Model):
     )
     photo = models.ImageField(
         "Фотография",
-        upload_to="/team",
+        upload_to="team",
     )
     posn = models.CharField(
         "Роль в команде",

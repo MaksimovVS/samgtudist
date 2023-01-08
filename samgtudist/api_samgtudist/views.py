@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import viewsets, generics
 
-# Create your views here.
+
+from .models import Material
+from . serializers import MaterialSerializer
+
+
+class MaterialAPIView(generics.ListCreateAPIView):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
