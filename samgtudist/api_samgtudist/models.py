@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+from django.forms import TextInput, Textarea
 
 
 FILES_TYPE = (("docx", "Word"),
@@ -202,3 +204,31 @@ class Team(models.Model):
         ordering = ['last_name']
         verbose_name = ("Команда")
         verbose_name_plural = ("Команда")
+
+
+class MaterialInline(admin.TabularInline):
+    model = Quote
+
+
+class MaterialFileInline(admin.TabularInline):
+    model = File
+
+
+class MaterialContentInline(admin.TabularInline):
+    model = Content
+
+
+class MaterialExamplePageInline(admin.TabularInline):
+    model = ExamplePage
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    inlines = [MaterialInline,
+               MaterialFileInline,
+               MaterialContentInline,
+               MaterialExamplePageInline,]
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size':'20'})},
+        models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
+    }

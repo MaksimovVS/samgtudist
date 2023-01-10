@@ -1,10 +1,12 @@
+from django.db import models
 from django.contrib import admin
-from .models import Content, ExamplePage, File, Material, Quote, Subject, Team
+from django.forms import TextInput, Textarea
+from .models import Content, ExamplePage, File, Quote, Subject, Team
 
 
 # Register your models here.
-class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('id', 'material_title', 'material_type',)
+# class MaterialAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'material_title', 'material_type',)
 
 
 class SubjectAdmin(admin.ModelAdmin):
@@ -17,6 +19,10 @@ class FileAdmin(admin.ModelAdmin):
 
 class QuoteAdmin(admin.ModelAdmin):
     list_display = ("id", "quote_text", "material")
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size':'20'})},
+        models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
+    }
 
 
 class ContentAdmin(admin.ModelAdmin):
@@ -27,7 +33,6 @@ class ExamplePageAdmin(admin.ModelAdmin):
     list_display = ("id", "page", "material")
 
 
-admin.site.register(Material, MaterialAdmin)
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Quote, QuoteAdmin)
