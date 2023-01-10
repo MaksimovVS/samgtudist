@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Material, Quote, ExamplePage, Content, Subject
+from api_samgtudist.models import Material, Quote, ExamplePage, Content
 
 
 class QuotesSerializer(serializers.ModelSerializer):
