@@ -71,7 +71,7 @@ class Material(models.Model):
         auto_now_add=True,
     )
     material_type = models.CharField(
-        verbose_name="Тип работы",
+        "Тип работы",
         help_text="Выберите соответсующий тип работы",
         max_length=32,
         choices=MATERIALS_TYPE,
@@ -156,8 +156,8 @@ class File(models.Model):
 
 class ExamplePage(models.Model):
     page = models.TextField(
-        verbose_name="HTML текст",
-        help_text="Сохраняется сгенерированный HTML текст для сайта",
+        "HTML текст",
+        help_text="Сохраняется сгенерированный HTML текст для отображения на сайте",
     )
     material = models.ForeignKey(
         Material,
