@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+from django.forms import TextInput, Textarea
 
 
 FILES_TYPE = (("docx", "Word"),
@@ -8,17 +10,17 @@ FILES_TYPE = (("docx", "Word"),
               ("xls", "Excel"),
               )
 
-TEAM_JOB = (("DS",'Design'),
-            ("FD",'Frontend Developer'),
-            ("BD",'Backend Developer'),
-            ("PM",'Project Manager'),
-            ("TT",'Tester'),
+TEAM_JOB = (("DS", 'Design'),
+            ("FD", 'Frontend Developer'),
+            ("BD", 'Backend Developer'),
+            ("PM", 'Project Manager'),
+            ("TT", 'Tester'),
             )
 
-MATERIALS_TYPE = (("kr",'Курсовая работа'),
-                  ("dr","Дипломная работа"),
-                  ("pr","Практическая работа"),
-                  ("lr","Лабораторная работа"),
+MATERIALS_TYPE = (("kr", 'Курсовая работа'),
+                  ("dr", "Дипломная работа"),
+                  ("pr", "Практическая работа"),
+                  ("lr", "Лабораторная работа"),
                   # "Расчетно-графическая работа",
                   # "Пояснительная записка",
                   # "Учебная/Производственная практика",
@@ -30,14 +32,14 @@ MATERIALS_TYPE = (("kr",'Курсовая работа'),
                   # "Лекция",
                   # "Типовой расчет",
                   # "Эссе",
-                  # "Экзамен",
-                  # "Ответы на вопросы",
+                  ("exam", "Экзамен"),
+                  ("ex_anw", "Ответы на вопросы для экамена"),
                   # "Ответы к тесту",
-                  # "Доклад",
+                  ("dl", "Доклад"),
                   # "Рабочая Тетрадь",
                   # "Реферат",
-                  # "Методические указания",
-                  # "Задача",
+                  ("pos", "Методические пособие"),
+                  ("task", "Задача"),
                   # "Другое",
                   )
 
@@ -49,8 +51,13 @@ class Subject(models.Model):
         max_length=256,
     )
 
+    def __str__(self) -> str:
+        return self.subject_title
+
     class Meta:
         ordering = ['subject_title']
+        verbose_name = ("Предмет")
+        verbose_name_plural = ("Предметы")
 
 
 class Material(models.Model):
@@ -75,6 +82,13 @@ class Material(models.Model):
         related_query_name="material"
         )
 
+    def __str__(self) -> str:
+        return self.material_title
+
+    class Meta:
+        verbose_name = ("Работа")
+        verbose_name_plural = ("Работы")
+
 
 class Content(models.Model):
     content_text = models.TextField(
@@ -86,6 +100,13 @@ class Content(models.Model):
         on_delete=models.CASCADE,
         related_name="content_text"
     )
+
+    class Meta:
+        verbose_name = ("Содержание")
+        verbose_name_plural = ("Содержания")
+
+    def __str__(self) -> str:
+        return self.content_text
 
 
 class Quote(models.Model):
@@ -100,6 +121,13 @@ class Quote(models.Model):
         related_query_name="quotes_set"
     )
 
+    def __str__(self) -> str:
+        return self.quote_text
+
+    class Meta:
+        verbose_name = ("Цитата")
+        verbose_name_plural = ("Цитаты")
+
 
 class File(models.Model):
     file_type = models.CharField(
@@ -108,7 +136,8 @@ class File(models.Model):
     )
     file = models.FileField(
         # TODO file_save_path - функция,
-        #  которая будет возращать путь для сохраниения файла формата ДИСЦИПЛИНА/РАБОТА
+        # которая будет возращать путь для
+        # сохраниения файла формата ДИСЦИПЛИНА/РАБОТА
         # upload_to=file_save_path
         upload_to="works",
         # TODO file_name - функция которая будет называть файл
@@ -119,6 +148,10 @@ class File(models.Model):
         on_delete=models.CASCADE,
         related_name="files_with_work"
     )
+
+    class Meta:
+        verbose_name = ("Файл")
+        verbose_name_plural = ("Файлы")
 
 
 class ExamplePage(models.Model):
@@ -131,6 +164,13 @@ class ExamplePage(models.Model):
         on_delete=models.CASCADE,
         related_name="example_page",
     )
+
+    def __str__(self) -> str:
+        return self.page
+
+    class Meta:
+        verbose_name = ("Пример Страницы")
+        verbose_name_plural = ("Примеры Страниц")
 
 
 class Team(models.Model):
@@ -159,3 +199,36 @@ class Team(models.Model):
         max_length=128,
         choices=TEAM_JOB,
     )
+
+    class Meta:
+        ordering = ['last_name']
+        verbose_name = ("Команда")
+        verbose_name_plural = ("Команда")
+
+
+class MaterialInline(admin.TabularInline):
+    model = Quote
+
+
+class MaterialFileInline(admin.TabularInline):
+    model = File
+
+
+class MaterialContentInline(admin.TabularInline):
+    model = Content
+
+
+class MaterialExamplePageInline(admin.TabularInline):
+    model = ExamplePage
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    inlines = [MaterialInline,
+               MaterialFileInline,
+               MaterialContentInline,
+               MaterialExamplePageInline,]
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size':'20'})},
+        models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
+    }
