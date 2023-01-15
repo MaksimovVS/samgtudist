@@ -109,14 +109,14 @@ class Paragraph(models.Model):
         verbose_name_plural = ("Абзацы")
 
 
-class Pictures(models.Model):
+class Picture(models.Model):
     image = models.ImageField(
         "Иллюстрации к работе",
         # upload_to=file_save_path
         upload_to="image"
     )
     material = models.ForeignKey(
-        "Materisl",
+        "Material",
         on_delete=models.CASCADE,
     )
 
