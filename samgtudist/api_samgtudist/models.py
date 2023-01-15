@@ -70,7 +70,7 @@ class Material(models.Model):
         auto_now_add=True,
     )
     material_type = models.CharField(
-        verbose_name="Тип работы",
+        "Тип работы",
         help_text="Выберите соответсующий тип работы",
         max_length=32,
         choices=MATERIALS_TYPE,

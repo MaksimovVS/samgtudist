@@ -3,11 +3,6 @@ from django.contrib import admin
 from .models import Content, ExamplePage, File, Subject, Team
 
 
-# Register your models here.
-# class MaterialAdmin(admin.ModelAdmin):
-#     list_display = ('id', 'material_title', 'material_type',)
-
-
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ('id', "subject_title",)
 
