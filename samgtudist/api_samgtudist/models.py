@@ -97,8 +97,7 @@ class Paragraph(models.Model):
     material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
-        related_name="quotes",
-        related_query_name="quotes_set"
+        related_name="paragraph",
     )
 
     def __str__(self) -> str:
@@ -118,6 +117,7 @@ class Picture(models.Model):
     material = models.ForeignKey(
         "Material",
         on_delete=models.CASCADE,
+        related_name="images"
     )
 
 
@@ -183,6 +183,13 @@ class MaterialFileInline(admin.TabularInline):
     model = File
 
 
+class ParagraphInline(admin.TabularInline):
+    model = Paragraph
+
+
+class PictureInline(admin.TabularInline):
+    model = Picture
+
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    inlines = [MaterialFileInline]
+    inlines = [MaterialFileInline, ParagraphInline, PictureInline]
