@@ -1,37 +1,48 @@
 from rest_framework import serializers
-from api_samgtudist.models import Material, Quote, ExamplePage, Content
+from api_samgtudist.models import Material, Picture, Paragraph, Subject
 
 
-class QuotesSerializer(serializers.ModelSerializer):
+class ParagraphSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Quote
-        fields = ('quote_text',)
+        model = Paragraph
+        fields = ["paragraph_text",]
 
 
-class ExamplePageSerializer(serializers.ModelSerializer):
+class PictureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExamplePage
-        fields = ("page",)
-
-
-class ContentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ("content_text",)
+        model = Picture
+        fields = ["image",]
 
 
 class MaterialSerializer(serializers.ModelSerializer):
-    quote_text = QuotesSerializer(many=True, read_only=True, source="quotes")
-    example_page = ExamplePageSerializer(many=True, read_only=True)
-    content_text = ContentSerializer(read_only=True)
+    paragraph_text = ParagraphSerializer(
+        many=True,
+        read_only=True,
+        source="paragraph"
+        )
+    image = PictureSerializer(
+        many=True,
+        source="images"
+        )
 
     class Meta:
         model = Material
         fields = [
+            'subject',
             'id',
             'material_title',
-            'quote_text',
-            'example_page',
-            'content_text',
-            'subject',
+            'paragraph_text',
+            'image',
         ]
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = ["id", "subject_title"]
+
+
+class SubjectListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Material
+        fields = ["id", "material_title", "material_type"]

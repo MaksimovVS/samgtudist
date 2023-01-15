@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib import admin
-from django.forms import TextInput, Textarea
 
 
 FILES_TYPE = (("docx", "Word"),
@@ -21,26 +20,26 @@ MATERIALS_TYPE = (("kr", 'Курсовая работа'),
                   ("dr", "Дипломная работа"),
                   ("pr", "Практическая работа"),
                   ("lr", "Лабораторная работа"),
-                  # "Расчетно-графическая работа",
-                  # "Пояснительная записка",
-                  # "Учебная/Производственная практика",
-                  # "Выпускная квалификационная работа",
-                  # "Тест",
-                  # "Чертеж",
-                  # "Эскиз",
-                  # "Макет",
-                  # "Лекция",
-                  # "Типовой расчет",
-                  # "Эссе",
+                  ("rgr", "Расчетно-графическая работа"),
+                  ("pz", "Пояснительная записка"),
+                  ("upp", "Учебная/Производственная практика"),
+                  ("vkr", "Выпускная квалификационная работа"),
+                  ("test", "Тест"),
+                  ("chert", "Чертеж"),
+                  ("eskiz", "Эскиз"),
+                  ("maket", "Макет"),
+                  ("lkc", "Лекция"),
+                  ("tr", "Типовой расчет"),
+                  ("esse", "Эссе"),
                   ("exam", "Экзамен"),
                   ("ex_anw", "Ответы на вопросы для экамена"),
-                  # "Ответы к тесту",
+                  ("ans_test", "Ответы к тесту"),
                   ("dl", "Доклад"),
-                  # "Рабочая Тетрадь",
-                  # "Реферат",
+                  ("rt", "Рабочая Тетрадь"),
+                  ("ref", "Реферат"),
                   ("pos", "Методические пособие"),
                   ("task", "Задача"),
-                  # "Другое",
+                  ("var", "Другое"),
                   )
 
 
@@ -90,43 +89,36 @@ class Material(models.Model):
         verbose_name_plural = ("Работы")
 
 
-class Content(models.Model):
-    content_text = models.TextField(
-        "Содержание",
-        help_text="Введите содержание работы",
-    )
-    material = models.OneToOneField(
-        Material,
-        on_delete=models.CASCADE,
-        related_name="content_text"
-    )
-
-    class Meta:
-        verbose_name = ("Содержание")
-        verbose_name_plural = ("Содержания")
-
-    def __str__(self) -> str:
-        return self.content_text
-
-
-class Quote(models.Model):
-    quote_text = models.TextField(
+class Paragraph(models.Model):
+    paragraph_text = models.TextField(
         "Цитата",
         help_text="Введите цитату",
     )
     material = models.ForeignKey(
         Material,
         on_delete=models.CASCADE,
-        related_name="quotes",
-        related_query_name="quotes_set"
+        related_name="paragraph",
     )
 
     def __str__(self) -> str:
-        return self.quote_text
+        return self.paragraph_text
 
     class Meta:
-        verbose_name = ("Цитата")
-        verbose_name_plural = ("Цитаты")
+        verbose_name = ("Абзац")
+        verbose_name_plural = ("Абзацы")
+
+
+class Picture(models.Model):
+    image = models.ImageField(
+        "Иллюстрации к работе",
+        # upload_to=file_save_path
+        upload_to="image"
+    )
+    material = models.ForeignKey(
+        "Material",
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
 
 
 class File(models.Model):
@@ -152,25 +144,6 @@ class File(models.Model):
     class Meta:
         verbose_name = ("Файл")
         verbose_name_plural = ("Файлы")
-
-
-class ExamplePage(models.Model):
-    page = models.TextField(
-        "HTML текст",
-        help_text="Сохраняется сгенерированный HTML текст для отображения на сайте",
-    )
-    material = models.ForeignKey(
-        Material,
-        on_delete=models.CASCADE,
-        related_name="example_page",
-    )
-
-    def __str__(self) -> str:
-        return self.page
-
-    class Meta:
-        verbose_name = ("Пример Страницы")
-        verbose_name_plural = ("Примеры Страниц")
 
 
 class Team(models.Model):
@@ -206,29 +179,17 @@ class Team(models.Model):
         verbose_name_plural = ("Команда")
 
 
-class MaterialInline(admin.TabularInline):
-    model = Quote
-
-
 class MaterialFileInline(admin.TabularInline):
     model = File
 
 
-class MaterialContentInline(admin.TabularInline):
-    model = Content
+class ParagraphInline(admin.TabularInline):
+    model = Paragraph
 
 
-class MaterialExamplePageInline(admin.TabularInline):
-    model = ExamplePage
-
+class PictureInline(admin.TabularInline):
+    model = Picture
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    inlines = [MaterialInline,
-               MaterialFileInline,
-               MaterialContentInline,
-               MaterialExamplePageInline,]
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size':'20'})},
-        models.TextField: {'widget': Textarea(attrs={'rows':2, 'cols':40})},
-    }
+    inlines = [MaterialFileInline, ParagraphInline, PictureInline]
