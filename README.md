@@ -25,6 +25,13 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+#### Просмотр документации API
+
+После запуска сервера, перейдите по адресу:
+```bash
+http://127.0.0.1:8000/swagger-ui/
+```
+
 #### Работа с API
 
 Создайте суперпользователя
