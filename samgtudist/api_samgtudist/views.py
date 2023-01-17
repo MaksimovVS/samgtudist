@@ -9,7 +9,7 @@ from api_samgtudist import serializers
 
 class IndexPageVievSet(ListModelMixin,
                        viewsets.GenericViewSet):
-    """Передаем список предметов. Главная страница"""
+    """Передаем список предметов. Главная страница."""
     queryset = Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -17,7 +17,7 @@ class IndexPageVievSet(ListModelMixin,
 
 class SubjectListViewSet(RetrieveAPIView,
                        viewsets.GenericViewSet):
-    """Передаем список работ по предмету. Вторая страница"""
+    """Передаем список работ по предмету. Вторая страница."""
     queryset = Material.objects.all()
     serializer_class = serializers.SubjectListSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -26,7 +26,7 @@ class SubjectListViewSet(RetrieveAPIView,
 class MaterialViewSet(RetrieveAPIView,
     viewsets.GenericViewSet
 ):
-    """Передает информацию о работе. ретья страница"""
+    """Передает информацию о работе. Третья страница."""
     queryset = Material.objects.all()
     serializer_class = serializers.MaterialSerializer
     permission_classes = (IsAdminOrReadOnly,)
