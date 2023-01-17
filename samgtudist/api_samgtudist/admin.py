@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import File, Subject, Team
+from .models import File, Subject, Team, Paragraph
 
 
 class SubjectAdmin(admin.ModelAdmin):
@@ -14,3 +14,4 @@ class FileAdmin(admin.ModelAdmin):
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(File, FileAdmin)
 admin.site.register(Team)
+admin.site.register(Paragraph)
