@@ -42,7 +42,7 @@ def parse_paragraphs(file_path:str, instance:File) -> list[Paragraph]:
 
     return paragraph_list
 
-def parse_images(file_path:str, instance:File) -> list[Picture]:
+def parse_images(file_path:str, instance:File) -> None:
     #разархивировать картинки в временную папку
     temp_dir = TemporaryDirectory(dir= MEDIA_ROOT + '/' + 'tmp/')
 
