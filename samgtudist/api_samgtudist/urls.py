@@ -7,7 +7,7 @@ app_name = 'api_samgtudist'
 
 router_v1 = routers.DefaultRouter()
 
-router_v1.register('index', views.IndexPageVievSet, basename="index")
+router_v1.register('index', views.IndexPageViewSet, basename="index")
 router_v1.register("material", views.MaterialViewSet, basename="material")
 router_v1.register("subject_list",
                    views.SubjectListViewSet, basename="subject_list")

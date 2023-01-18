@@ -54,7 +54,7 @@ class Subject(models.Model):
         return self.subject_title
 
     class Meta:
-        ordering = ['subject_title']
+        ordering = ('subject_title',)
         verbose_name = ("Предмет")
         verbose_name_plural = ("Предметы")
 
@@ -85,8 +85,9 @@ class Material(models.Model):
         return self.material_title
 
     class Meta:
-        verbose_name = ("Работа")
-        verbose_name_plural = ("Работы")
+        ordering = ('subject_title', '-created_date')
+        verbose_name = "Работа"
+        verbose_name_plural = "Работы"
 
 
 class Paragraph(models.Model):
@@ -104,8 +105,8 @@ class Paragraph(models.Model):
         return self.paragraph_text
 
     class Meta:
-        verbose_name = ("Абзац")
-        verbose_name_plural = ("Абзацы")
+        verbose_name = "Абзац"
+        verbose_name_plural = "Абзацы"
 
 
 class Picture(models.Model):
@@ -142,8 +143,8 @@ class File(models.Model):
     )
 
     class Meta:
-        verbose_name = ("Файл")
-        verbose_name_plural = ("Файлы")
+        verbose_name = "Файл"
+        verbose_name_plural = "Файлы"
 
 
 class Team(models.Model):
@@ -174,9 +175,9 @@ class Team(models.Model):
     )
 
     class Meta:
-        ordering = ['last_name']
-        verbose_name = ("Команда")
-        verbose_name_plural = ("Команда")
+        ordering = ('last_name',)
+        verbose_name = "Команда"
+        verbose_name_plural = "Команды"
 
 
 class MaterialFileInline(admin.TabularInline):
@@ -192,4 +193,4 @@ class PictureInline(admin.TabularInline):
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    inlines = [MaterialFileInline, ParagraphInline, PictureInline]
+    inlines = (MaterialFileInline, ParagraphInline, PictureInline)
