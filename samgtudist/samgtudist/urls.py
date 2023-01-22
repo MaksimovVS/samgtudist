@@ -43,12 +43,10 @@ urlpatterns = [
         'api/',
         include('api_samgtudist.urls', namespace="api_samgtudist")
     ),
-]
+] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
-#временное решение, чтобы показывать статические файлы без внешнего сервера
-#обязательно убрать в продакшене!!      ????
