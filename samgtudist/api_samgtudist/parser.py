@@ -1,9 +1,10 @@
 import docx2txt
+import os
 from os import listdir
 from tempfile import TemporaryDirectory
 from docx import Document
 from api_samgtudist.models import File, Paragraph, Picture
-from samgtudist.settings import MEDIA_ROOT
+
 
 
 # TODO:
@@ -14,14 +15,14 @@ def parse_file(instance: File) -> None:
         return
 
     file_path = instance.file.path
-
+    print(file_path)
     # Выполнится если у работы не добавлены параграфы
     if not Paragraph.objects.filter(material=instance.material).all():
         Paragraph.objects.bulk_create(parse_paragraphs(file_path, instance))
         parse_images(file_path, instance)
 
 
-def parse_paragraphs(file_path: str, instance: File) -> list[Paragraph]:
+def parse_paragraphs(file_path: str, instance: File):
     doc = Document(file_path)
     paragraph_list = []
 
@@ -44,7 +45,7 @@ def parse_paragraphs(file_path: str, instance: File) -> list[Paragraph]:
 
 def parse_images(file_path: str, instance: File) -> None:
     # разархивировать картинки в временную папку
-    temp_dir = TemporaryDirectory(dir=MEDIA_ROOT + '/' + 'tmp/')
+    temp_dir = TemporaryDirectory()
 
     docx2txt.process(file_path, temp_dir.name)
 
