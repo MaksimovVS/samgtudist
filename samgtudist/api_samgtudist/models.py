@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 from django.db import models
 from django.contrib import admin
 
@@ -141,7 +142,10 @@ class File(models.Model):
         on_delete=models.CASCADE,
         related_name="files_with_work"
     )
-
+    def save(self, *args, **kwargs) -> None:
+        file_type = self.file.name.split('.')[-1]
+        self.file_type = file_type
+        return super().save(self, *args, **kwargs)
     class Meta:
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
