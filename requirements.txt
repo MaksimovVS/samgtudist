@@ -6,3 +6,6 @@ PyJWT==2.6.0
 djoser==2.1.0
 djangorestframework-simplejwt==4.8.0
 drf-yasg==1.21.4
+pyngrok==5.0.5
+docx2txt==0.8
+python-docx==0.8.11

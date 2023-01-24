@@ -85,7 +85,7 @@ class Material(models.Model):
         return self.material_title
 
     class Meta:
-        ordering = ('subject_title', '-created_date')
+        ordering = ('material_title', '-created_date')
         verbose_name = "Работа"
         verbose_name_plural = "Работы"
 
@@ -177,7 +177,7 @@ class Team(models.Model):
     class Meta:
         ordering = ('last_name',)
         verbose_name = "Команда"
-        verbose_name_plural = "Команды"
+        # verbose_name_plural = "Команды"
 
 
 class MaterialFileInline(admin.TabularInline):
