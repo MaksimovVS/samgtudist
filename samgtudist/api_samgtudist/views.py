@@ -1,29 +1,29 @@
-from rest_framework import viewsets, filters
-from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework import filters
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from api_samgtudist.models import Material, Subject
 from api_samgtudist.permissions import IsAdminOrReadOnly
 from api_samgtudist import serializers
 
 
-class IndexPageViewSet(ListAPIView, viewsets.GenericViewSet):
+class IndexPageViewSet(ReadOnlyModelViewSet):
     """Передаем список предметов. Главная страница."""
     queryset = Subject.objects.all()
-    serializer_class = serializers.SubjectSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-
-
-class SubjectListViewSet(RetrieveAPIView, viewsets.GenericViewSet):
-    """Передаем список работ по предмету. Вторая страница."""
-    queryset = Material.objects.all()
     serializer_class = serializers.SubjectListSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class MaterialViewSet(RetrieveAPIView, viewsets.GenericViewSet):
-    """Передает информацию о работе. Третья страница."""
+class MaterialViewSet(ReadOnlyModelViewSet):
+    """Передает информацию о работах.Вторая и Третья страница."""
     queryset = Material.objects.all()
-    serializer_class = serializers.MaterialSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ("material_title",)
+
+    def get_serializer_class(self):
+        if self.kwargs.get('pk', None):
+            return serializers.MaterialDetailSerializer
+        return serializers.MaterialSerializer
+
+    def get_queryset(self):
+        return Material.objects.filter(subject=self.kwargs.get('subject_id'))
