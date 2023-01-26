@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api_samgtudist.models import Material, Picture, Paragraph, Subject
+from .models import Material, Picture, Paragraph, Subject
 
 
 class ParagraphSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class PictureSerializer(serializers.ModelSerializer):
         fields = ["image",]
 
 
-class MaterialSerializer(serializers.ModelSerializer):
+class MaterialDetailSerializer(serializers.ModelSerializer):
     paragraph_text = ParagraphSerializer(
         many=True,
         read_only=True,
@@ -36,13 +36,13 @@ class MaterialSerializer(serializers.ModelSerializer):
         ]
 
 
-class SubjectSerializer(serializers.ModelSerializer):
+class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Subject
-        fields = ["id", "subject_title"]
+        model = Material
+        fields = ["id", "material_title", "material_type"]
 
 
 class SubjectListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Material
-        fields = ["id", "material_title", "material_type"]
+        model = Subject
+        fields = ["id", "subject_title"]
