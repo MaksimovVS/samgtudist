@@ -9,3 +9,4 @@ drf-yasg==1.21.4
 pyngrok==5.0.5
 docx2txt==0.8
 python-docx==0.8.11
+django-cors-headers==3.13.0
