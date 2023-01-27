@@ -18,7 +18,7 @@ class MaterialViewSet(ReadOnlyModelViewSet):
     queryset = Material.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ("material_title",)
+    search_fields = ("material_title", "paragraph__paragraph_text")
 
     def get_serializer_class(self):
         if self.kwargs.get('pk', None):
