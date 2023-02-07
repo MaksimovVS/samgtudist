@@ -20,7 +20,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
     ),
-    patterns=[path('api/', include('api_samgtudist.urls')), ], # !!!
+    patterns=[path('api/', include('api_samgtudist.urls')), ],  # !!!
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
@@ -43,7 +43,7 @@ urlpatterns = [
         'api/',
         include('api_samgtudist.urls', namespace="api_samgtudist")
     ),
-] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
 
 if DEBUG:
     urlpatterns += static(

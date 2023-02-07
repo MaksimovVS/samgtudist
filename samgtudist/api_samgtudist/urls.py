@@ -9,9 +9,10 @@ router_v1 = routers.DefaultRouter()
 
 router_v1.register('index', views.IndexPageViewSet)
 router_v1.register(r"(?P<subject_id>\d+)/material", views.MaterialViewSet)
+router_v1.register('', views.SearchViewSet)
 
 urlpatterns = [
     path("v1/", include(router_v1.urls)),
-    path("v1/", include("djoser.urls")),
-    path("v1/", include("djoser.urls.jwt")),
+    # path("v1/", include("djoser.urls")),
+    # path("v1/", include("djoser.urls.jwt")),
 ]

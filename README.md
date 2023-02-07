@@ -21,6 +21,7 @@ pip install -r requirements.txt
 ```
 Выполните миграции и запустите сервер:
 ```bash
+cd samgtudist
 python manage.py migrate
 python manage.py runserver
 ```

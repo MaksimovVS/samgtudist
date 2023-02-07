@@ -14,11 +14,9 @@ class IndexPageViewSet(ReadOnlyModelViewSet):
 
 
 class MaterialViewSet(ReadOnlyModelViewSet):
-    """Передает информацию о работах.Вторая и Третья страница."""
+    """Передает информацию о работах. Вторая и третья страница."""
     queryset = Material.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ("material_title", "paragraph__paragraph_text")
 
     def get_serializer_class(self):
         if self.kwargs.get('pk', None):
@@ -27,3 +25,12 @@ class MaterialViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Material.objects.filter(subject=self.kwargs.get('subject_id'))
+
+
+class SearchViewSet(ReadOnlyModelViewSet):
+    """Возращает информцию при поиске данных."""
+    queryset = Material.objects.all()
+    serializer_class = serializers.MaterialDetailSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("material_title", "paragraph__paragraph_text")
