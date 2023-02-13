@@ -46,3 +46,11 @@ class SubjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ["id", "subject_title"]
+
+
+class ParagraphSearchSerializer(serializers.ModelSerializer):
+    material = MaterialSerializer
+
+    class Meta:
+        model = Paragraph
+        fields = ('material', 'paragraph_text')

@@ -8,6 +8,8 @@ app_name = 'api_samgtudist'
 router_v1 = routers.DefaultRouter()
 
 router_v1.register('index', views.IndexPageViewSet)
+router_v1.register(r'search/(?P<search_word>\w+)', views.SearchListAPIView,
+                   basename='search')
 router_v1.register(r"(?P<subject_id>\d+)/material", views.MaterialViewSet)
 
 urlpatterns = [

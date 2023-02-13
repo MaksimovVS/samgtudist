@@ -1,7 +1,9 @@
+from django.contrib.postgres.search import SearchVector
 from rest_framework import filters
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
-from api_samgtudist.models import Material, Subject
+from api_samgtudist.models import Material, Subject, Paragraph
 from api_samgtudist.permissions import IsAdminOrReadOnly
 from api_samgtudist import serializers
 
@@ -27,3 +29,14 @@ class MaterialViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Material.objects.filter(subject=self.kwargs.get('subject_id'))
+
+
+class SearchListAPIView(ViewSet, ListAPIView):
+    """Представление для отображения результатов поиска по Тестам."""
+    serializer_class = serializers.ParagraphSearchSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def get_queryset(self):
+        return Paragraph.objects.annotate(
+            search=SearchVector('paragraph_text', 'material__material_title')
+        ).filter(search=self.kwargs.get('search_word'))
