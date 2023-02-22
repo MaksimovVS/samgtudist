@@ -1,6 +1,35 @@
 # samgtudist
 ## Сайт примеров студенческих работ
 
+### Запуск проекта docker-compose
+
+Склонируйте и перейдите в папку с репозиторием:
+```bash
+git clone git@github.com:MaksimovVS/samgtudist.git
+cd samgtudist
+```
+
+Создайте .env:
+```bash
+touch .env
+```
+
+Откройте файл .env и внесите следующие данные:
+```bash
+SECRET_KEY_DJANGO=your_django_secret_key
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+```
+
+Выполните команду для сборки и запуска контейнеров:
+```bash
+sudo docker-compose up -d --build
+```
+
 
 ### Для запуска проекта (для Windows):
 
