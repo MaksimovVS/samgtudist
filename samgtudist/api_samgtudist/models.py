@@ -1,6 +1,9 @@
-from typing import Iterable, Optional
 from django.db import models
 from django.contrib import admin
+from django.contrib.contenttypes.fields import GenericRelation
+from django.db.models import CharField, TextField
+
+from hitcount.models import HitCountMixin, HitCount
 
 
 FILES_TYPE = (("docx", "Word"),
@@ -51,16 +54,16 @@ class Subject(models.Model):
         max_length=256,
     )
 
-    def __str__(self) -> str:
+    def __str__(self) -> CharField:
         return self.subject_title
 
     class Meta:
         ordering = ('subject_title',)
-        verbose_name = ("Предмет")
-        verbose_name_plural = ("Предметы")
+        verbose_name = "Предмет"
+        verbose_name_plural = "Предметы"
 
 
-class Material(models.Model):
+class Material(models.Model, HitCountMixin):
     material_title = models.CharField(
         "Название работы",
         help_text="Введите название работы",
@@ -81,8 +84,11 @@ class Material(models.Model):
         related_name="materials_related",
         related_query_name="material"
         )
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='object_pk',
+        related_query_name='hit_count_generic_relation')
 
-    def __str__(self) -> str:
+    def __str__(self) -> CharField:
         return self.material_title
 
     class Meta:
@@ -102,7 +108,7 @@ class Paragraph(models.Model):
         related_name="paragraph",
     )
 
-    def __str__(self) -> str:
+    def __str__(self) -> TextField:
         return self.paragraph_text
 
     class Meta:
@@ -142,10 +148,12 @@ class File(models.Model):
         on_delete=models.CASCADE,
         related_name="files_with_work"
     )
+
     def save(self, *args, **kwargs) -> None:
         file_type = self.file.name.split('.')[-1]
         self.file_type = file_type
         return super().save(self, *args, **kwargs)
+
     class Meta:
         verbose_name = "Файл"
         verbose_name_plural = "Файлы"
@@ -194,6 +202,7 @@ class ParagraphInline(admin.TabularInline):
 
 class PictureInline(admin.TabularInline):
     model = Picture
+
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):

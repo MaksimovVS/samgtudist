@@ -5,13 +5,13 @@ from .models import Material, Picture, Paragraph, Subject
 class ParagraphSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paragraph
-        fields = ["paragraph_text",]
+        fields = ("paragraph_text",)
 
 
 class PictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Picture
-        fields = ["image",]
+        fields = ("image",)
 
 
 class MaterialDetailSerializer(serializers.ModelSerializer):
@@ -54,3 +54,9 @@ class ParagraphSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Paragraph
         fields = ('material', 'paragraph_text')
+
+
+class PopularMaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Material
+        fields = ("id", "material_title", "material_type")
